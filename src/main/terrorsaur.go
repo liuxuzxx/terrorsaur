@@ -15,6 +15,9 @@ func main() {
 	fmt.Println(sumString("左手", "右手"))
 
 	logVarInformation()
+	replaceVar()
+	showBasicTypes()
+	convertType()
 }
 
 /**
@@ -49,3 +52,43 @@ func logVarInformation() {
 	var count, numberStr = 1, "Yes"
 	fmt.Println(count, language, c, cpp, python, java, golang, numberStr)
 }
+
+/**
+:= 运算符号的使用说明 说白了就是替换var
+但是在函数外面不能使用
+使用这个可以推断inffered 类型
+*/
+func replaceVar() {
+	userName, password := "root", "root123"
+	fmt.Println(userName, password)
+}
+
+/**
+Golang的变量系列
+*/
+var (
+	flag      bool   = true
+	cluesName string = "线索的名字"
+	count     uint64 = 1<<64 - 1
+)
+
+func showBasicTypes() {
+	fmt.Println(flag, cluesName, count)
+}
+
+func convertType() {
+	const goLangVersion = "1.12.6"
+	driverClassName, connectionCount := "com.mysql.jdbc.Driver", 60
+	fmt.Print(driverClassName, float64(connectionCount), "Golang的版本号:", goLangVersion)
+}
+
+/**
+感觉GO的所有只要是你想声明多个的就使用括号就行了
+*/
+const (
+	driverClassName = "com.mysql.jdbc.Driver"
+	url             = "jdbc:mysql://localhost:3306"
+	port            = 3306
+	userName        = "root"
+	password        = "root124"
+)
