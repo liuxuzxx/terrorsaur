@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"math"
+	"runtime"
+	"time"
 )
 
 func main() {
@@ -18,6 +20,13 @@ func main() {
 	replaceVar()
 	showBasicTypes()
 	convertType()
+	equalDifferenceSeries(100)
+	binaryInt(20000)
+	squrt(-100)
+	deferTime()
+	checkSystemVersion()
+	pointer()
+	vertextInformation()
 }
 
 /**
@@ -92,3 +101,78 @@ const (
 	userName        = "root"
 	password        = "root124"
 )
+
+/**
+进入Go的控制类型的语句试验场
+发现Go声明变量怪怪的
+要么就是
+var 变量名 类型 = 初始化的数据
+要么就是 变量名 := 初始化的数据
+*/
+func equalDifferenceSeries(maxNumber int) {
+	var sum = 0
+	for index := 0; index < maxNumber; index++ {
+		sum += index
+	}
+	fmt.Println(maxNumber, "等差数列的和是:", sum)
+}
+
+func binaryInt(maxNumber int) {
+	sum := 1
+	for sum < maxNumber {
+		sum += sum
+	}
+	fmt.Println("获取到的最大二进制:{}", sum)
+}
+
+func squrt(number float64) {
+	if number < 0 {
+		fmt.Println("小于0的数字没法操作")
+	} else {
+		fmt.Println("开平发的数字是:", math.Sqrt(number))
+	}
+}
+
+func checkSystemVersion() {
+	fmt.Print("Go语言运行的操作系统环境")
+	switch os := runtime.GOOS; os {
+	case "linux":
+		fmt.Println("Linux操作系统")
+	case "windows":
+		fmt.Println("Windows操作系统:", os)
+	default:
+		fmt.Print("不知道啥子系统:", os)
+	}
+
+	fmt.Println(time.Thursday)
+}
+
+/**
+defer这个关键字怎么看怎么像 try{函数所有的代码}finally{defer语句}
+*/
+func deferTime() {
+	defer fmt.Println("推迟执行")
+	fmt.Println("在这之前执行")
+}
+
+/**
+坏了，Go越看越像c了，简直就是一个翻版的c啊，指针来了，其他还会远吗
+看看指针
+*/
+
+func pointer() {
+	number := 90
+	numberPoint := &number
+
+	fmt.Println(numberPoint)
+}
+
+type Vertex struct {
+	length int
+	width  int
+	height int
+}
+
+func vertextInformation() {
+	fmt.Print(Vertex{10, 90, 89})
+}
