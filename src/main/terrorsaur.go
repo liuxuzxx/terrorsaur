@@ -27,6 +27,8 @@ func main() {
 	checkSystemVersion()
 	pointer()
 	vertexInformation()
+	arrayInit()
+	sliceArray()
 }
 
 /**
@@ -110,11 +112,12 @@ var 变量名 类型 = 初始化的数据
 要么就是 变量名 := 初始化的数据
 */
 func equalDifferenceSeries(maxNumber int) {
+	sexNumber := 90
 	var sum = 0
 	for index := 0; index < maxNumber; index++ {
 		sum += index
 	}
-	fmt.Println(maxNumber, "等差数列的和是:", sum)
+	fmt.Println(maxNumber, "等差数列的和是:", sum, sexNumber)
 }
 
 func binaryInt(maxNumber int) {
@@ -164,7 +167,7 @@ func pointer() {
 	number := 90
 	numberPoint := &number
 
-	fmt.Println(numberPoint)
+	fmt.Println(*numberPoint)
 }
 
 type Vertex struct {
@@ -175,4 +178,34 @@ type Vertex struct {
 
 func vertexInformation() {
 	fmt.Print(Vertex{10, 90, 89})
+}
+
+/**
+初始化数组
+当使用 := 初始化的时候，复杂类型还是需要指定
+*/
+type UserDto struct {
+	userId    int64
+	userName  string
+	accountId string
+	password  string
+	birthday  string
+}
+
+func arrayInit() {
+	userArray := [1]UserDto{{1, "liuxu", "root", "root123", "2019-10-1"}}
+	fmt.Println(userArray)
+}
+
+/**
+切片数组，其实和Python一个味道
+slice就是一个裁剪的过程，说白了，就是裁剪的数据的数组
+保存着一个开始指针的引用和一个长度性质，我猜测是这么回事
+*/
+func sliceArray() {
+	userIds := [10]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	sliceUserIds := userIds[2:6]
+	fmt.Println(sliceUserIds)
+	sliceUserIds[2] = 90
+	fmt.Println(userIds)
 }
