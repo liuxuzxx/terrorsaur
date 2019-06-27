@@ -26,7 +26,7 @@ func main() {
 	deferTime()
 	checkSystemVersion()
 	pointer()
-	vertextInformation()
+	vertexInformation()
 }
 
 /**
@@ -173,6 +173,6 @@ type Vertex struct {
 	height int
 }
 
-func vertextInformation() {
+func vertexInformation() {
 	fmt.Print(Vertex{10, 90, 89})
 }
