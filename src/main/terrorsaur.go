@@ -15,6 +15,9 @@ const maxSize = 5 << 20
 func main() {
 	fmt.Println("直接开启Iris的Go的web编程")
 	app := iris.New()
+
+	app.Logger().SetLevel("debug")
+
 	app.Use(recover2.New())
 	app.Use(logger.New())
 
@@ -35,7 +38,7 @@ func main() {
 
 	app.Run(iris.Addr(":12309"), iris.WithConfiguration(iris.Configuration{
 		Charset: "UTF-8",
-	}))
+	}), iris.WithoutServerError(iris.ErrServerClosed))
 }
 
 func systemInformationHandler(ctx iris.Context) {
