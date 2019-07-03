@@ -8,6 +8,7 @@ import (
 	recover2 "github.com/kataras/iris/middleware/recover"
 	"mime/multipart"
 	"strings"
+	"terrorsaur/rest"
 )
 
 const maxSize = 5 << 20
@@ -42,7 +43,7 @@ func main() {
 }
 
 func systemInformationHandler(ctx iris.Context) {
-	ctx.JSON(iris.Map{"systemName": "Go-Iris系统", "status": "OK"})
+	ctx.JSON(rest.FetchSystemInformation())
 }
 
 func systemNameHandler(ctx iris.Context) {
