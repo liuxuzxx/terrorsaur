@@ -8,7 +8,6 @@ import (
 	recover2 "github.com/kataras/iris/middleware/recover"
 	"mime/multipart"
 	"strings"
-	"terrorsaur/rest"
 )
 
 const maxSize = 5 << 20
@@ -37,13 +36,13 @@ func main() {
 		video.Post("/upload", iris.LimitRequestBodySize(maxSize), uploadVideoHandler)
 	})
 
-	app.Run(iris.Addr(":12309"), iris.WithConfiguration(iris.Configuration{
+	_ = app.Run(iris.Addr(":12309"), iris.WithConfiguration(iris.Configuration{
 		Charset: "UTF-8",
 	}), iris.WithoutServerError(iris.ErrServerClosed))
 }
 
 func systemInformationHandler(ctx iris.Context) {
-	ctx.JSON(rest.FetchSystemInformation())
+	ctx.JSON(iris.Map{"name":"Iris-Web-系统"})
 }
 
 func systemNameHandler(ctx iris.Context) {
@@ -74,4 +73,8 @@ func beforeSave(ctx iris.Context, file *multipart.FileHeader) {
 	ip = strings.Replace(ip, ":", "_", -1)
 
 	file.Filename = ip + "-" + file.Filename
+}
+
+func goLanguageFormat() {
+	fmt.Println("This isa f嗲吗格式化的实验工作")
 }
