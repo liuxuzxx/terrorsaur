@@ -42,8 +42,9 @@ func main() {
 		algorithm.Get("", algorithmPageDataListHandler)
 	})
 
-	app.PartyFunc("/api/rattrap/chinese-ancient-poems", func(chineseAncientPoems router.Party) {
-		chineseAncientPoems.Get("",chineseAncientPoemsListHandler)
+	app.PartyFunc("/api/rattrap/chinese-ancient-article", func(chineseAncientPoems router.Party) {
+		chineseAncientPoems.Get("/poems", chineseAncientPoemsListHandler)
+		chineseAncientPoems.Get("/types",chineseAncientArticleTypeListHandler)
 	})
 
 	_ = app.Run(iris.Addr(":12309"), iris.WithConfiguration(iris.Configuration{
@@ -109,18 +110,39 @@ type AlgorithmVo struct {
 	CreateBy   string   `json:"createBy"`
 }
 
-func chineseAncientPoemsListHandler(ctx iris.Context){
-	results := []ChineseAncientPoemVo{{1,"静夜思","李白",[]string{"白日依山尽","黄河入海流","欲穷千里目","更上一层楼"}},
-		{2,"锦瑟","李商隐",[]string{"锦瑟无端五十弦，一弦一柱思华年。","庄生晓梦迷蝴蝶，望帝春心托杜鹃.","沧海月明珠有泪，蓝田日暖玉生烟","此情可待成追忆，只是当时已惘然"}},
-	{3,"蜀相","杜甫",[]string{"丞相祠堂何处寻，锦官城外柏森森","映阶碧草自春色，隔叶黄鹂空好音","三顾频烦天下计，两朝开济老臣心","出师未捷身先死，长使英雄泪满襟"}}}
+func chineseAncientPoemsListHandler(ctx iris.Context) {
+	results := []ChineseAncientPoemVo{{1, "静夜思", "李白", []string{"白日依山尽", "黄河入海流", "欲穷千里目", "更上一层楼"}},
+		{2, "锦瑟", "李商隐", []string{"锦瑟无端五十弦，一弦一柱思华年。", "庄生晓梦迷蝴蝶，望帝春心托杜鹃.", "沧海月明珠有泪，蓝田日暖玉生烟", "此情可待成追忆，只是当时已惘然"}},
+		{3, "蜀相", "杜甫", []string{"丞相祠堂何处寻，锦官城外柏森森", "映阶碧草自春色，隔叶黄鹂空好音", "三顾频烦天下计，两朝开济老臣心", "出师未捷身先死，长使英雄泪满襟"}}}
+
+	bytes, _ := json.Marshal(results)
+	ctx.JSON(iris.Map{"data": string(bytes), "message": "请求成功", "code": 0})
+}
+
+type ChineseAncientPoemVo struct {
+	Id           int64    `json:"id"`
+	PoemName     string   `json:"poemName"`
+	Author       string   `json:"author"`
+	LineContents []string `json:"lineContents"`
+}
+
+func chineseAncientArticleTypeListHandler(ctx iris.Context){
+	results := []ChineseAncientArticleTypeVo{
+		{1,"诗经","诗经就是诗歌中的圣经"},
+		{2,"楚辞","楚国的地盘"},
+		{3,"汉赋","我大汉天朝的赋多么的气魄"},
+		{4,"唐诗","封建社会的巅峰"},
+		{5,"宋词","精神丰富的时代"},
+		{6,"元曲","摇滚时代的来临"},
+		{7,"明清小说","长篇集锦"},
+	}
 
 	bytes, _ := json.Marshal(results)
 	ctx.JSON(iris.Map{"data":string(bytes),"message":"请求成功","code":0})
 }
 
-type ChineseAncientPoemVo struct{
-	Id        int64 `json:"id"`
-	PoemName string `json:"poemName"`
-	Author string `json:"author"`
-	LineContents []string `json:"lineContents"`
+type ChineseAncientArticleTypeVo struct{
+	Id int32 `json:"id"`
+	TypeName string `json:"typeName"`
+	Details string `json:"details"`
 }
