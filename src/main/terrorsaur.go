@@ -45,6 +45,7 @@ func main() {
 	app.PartyFunc("/api/rattrap/chinese-ancient-article", func(chineseAncientPoems router.Party) {
 		chineseAncientPoems.Get("/poems", chineseAncientPoemsListHandler)
 		chineseAncientPoems.Get("/types",chineseAncientArticleTypeListHandler)
+		chineseAncientPoems.Get("/{articleType:int}/articles",ancientArticleListHandler)
 	})
 
 	_ = app.Run(iris.Addr(":12309"), iris.WithConfiguration(iris.Configuration{
@@ -145,4 +146,26 @@ type ChineseAncientArticleTypeVo struct{
 	Id int32 `json:"id"`
 	TypeName string `json:"typeName"`
 	Details string `json:"details"`
+}
+
+type AncientArticleVo struct{
+	Id int64 `json:"id"`
+	ArticleName string `json:"articleName"`
+	ArticleType int32 `json:"articleType"`
+}
+
+func ancientArticleListHandler(ctx iris.Context){
+	articleType := ctx.Params().Get("articleType")
+	print("获取到的类型为:",articleType)
+	results := []AncientArticleVo{
+		{1,"关关雎鸠",1},
+		{2,"南风",1},
+		{3,"秦风",1},
+		{4,"静夜思",4},
+		{5,"出塞",4},
+		{6,"悯农",4},
+	}
+
+	bytes,_  := json.Marshal(results)
+	ctx.JSON(iris.Map{"data":string(bytes),"message":"请求成功","code":0})
 }
