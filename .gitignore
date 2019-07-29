@@ -13,6 +13,8 @@
 
 #Filter Project directory
 .idea/
+src/
+pkg/
 
 #Filter project file
 *.iml
