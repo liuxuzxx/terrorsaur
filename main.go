@@ -9,8 +9,8 @@ import (
 	"github.com/kataras/iris/middleware/recover"
 	"github.com/spf13/viper"
 	"log"
-	"terrorsaur/rest"
 	"strconv"
+	"terrorsaur/rest"
 )
 
 func main() {
@@ -37,6 +37,7 @@ func route() (app *iris.Application) {
 			})
 			articleParty.PartyFunc("/article-type", func(articleTypeParty router.Party) {
 				articleParty.Get("/types", rest.ArticleTypePageData)
+				articleParty.Get("/{typeId:int}", rest.ArticleTypeInformation)
 			})
 			articleParty.PartyFunc("/article", func(articleParty router.Party) {
 			})
