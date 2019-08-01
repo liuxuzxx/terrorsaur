@@ -5,6 +5,7 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
+
 type Config struct {
 	Server     Server
 	DataSource DataSource
@@ -17,16 +18,20 @@ type Server struct {
 }
 
 type DataSource struct {
-	Ip           string
-	Port         int
-	UserName     string
-	Password     string
-	DatabaseName string
+	Host               string
+	Port               int
+	UserName           string
+	Password           string
+	DatabaseName       string
+	Charset            string
+	MaxIdleConnections int
+	MaxOpenConnections int
 }
 
 var Conf Config
 
-func init(){
+func init() {
+	fmt.Println("Load config information from config directory!")
 	viper.AddConfigPath("./config")
 	viper.SetConfigName("config")
 	viper.WatchConfig()
@@ -35,7 +40,7 @@ func init(){
 	})
 	err := viper.ReadInConfig()
 	if err != nil {
-		fmt.Print("Parse the config file is error!")
+		fmt.Println("Parse the config file is error!")
 	}
 	err = viper.Unmarshal(&Conf)
 }

@@ -3,8 +3,11 @@ server:
   port: 12309
   name: Terrorsaru-Web Server
 dataSource:
-  ip: localhost
+  host: localhost
   port: 3306
   userName: root
   password: root
   databaseName: ancient_article
+  charset: utf8
+  maxIdleConnections: 10
+  maxOpenConnections: 100

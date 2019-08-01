@@ -35,12 +35,17 @@ func route() (app *iris.Application) {
 			articleParty.PartyFunc("/user", func(userParty router.Party) {
 			})
 			articleParty.PartyFunc("/article-type", func(articleTypeParty router.Party) {
-				articleParty.Get("/types", rest.ArticleTypePageData)
-				articleParty.Get("/{typeId:int}", rest.ArticleTypeInformation)
+				articleTypeParty.Get("/types", rest.ArticleTypePageData)
+				articleTypeParty.Get("/{typeId:int}/information", rest.ArticleTypeInformation)
 			})
 			articleParty.PartyFunc("/article", func(articleParty router.Party) {
 			})
 		})
 	}
 	return app
+}
+
+func init() {
+	fmt.Println("初始化一些配置和数据库信息的操作")
+	libs.Db = libs.InitDB()
 }
