@@ -9,6 +9,7 @@ import (
 	"log"
 	"strconv"
 	"terrorsaur/libs"
+	"terrorsaur/middleware"
 	"terrorsaur/rest"
 )
 
@@ -29,7 +30,7 @@ func main() {
 func route() (app *iris.Application) {
 	app = iris.New()
 
-	v1 := app.Party("/v1").AllowMethods(iris.MethodOptions)
+	v1 := app.Party("/v1", middleware.LogRequestInformationHandler).AllowMethods(iris.MethodOptions)
 	{
 		v1.PartyFunc("/api/rattrap/ancient-article", func(articleParty router.Party) {
 			articleParty.PartyFunc("/user", func(userParty router.Party) {
