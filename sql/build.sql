@@ -27,7 +27,6 @@ create table author(
 drop table if exists article;
 create table article(
     article_id int not null auto_increment primary key comment '文章自增的ID',
-    author_id int not null comment '作家的ID',
     title varchar(200) not null comment '文章题目',
     content text(20000) not null comment '文章内容',
     comment text(20000) not null comment '注解',
@@ -36,3 +35,10 @@ create table article(
     update_by varchar(100) not null comment '修改者',
     update_time datetime not null default now() comment '修改时间'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '古文信息' ;
+
+drop table if exists article_attribute;
+create table article_attribute(
+    article_id int(11) not null comment '文章的ID',
+    attribute_code int(11)  not null comment '属性code 1:类型　2:作者　3:朝代　4:形式',
+    attribute_value varchar(100) not null comment '属性值'
+)ENGINE=InnoDB DEFAULT CHARSET=UTF8 comment '诗词的属性信息';
