@@ -5,7 +5,6 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"log"
-	"os"
 	"strconv"
 )
 
@@ -18,7 +17,6 @@ func InitDB() *gorm.DB {
 	db, err := gorm.Open("mysql", connString)
 	if err != nil {
 		log.Panic(err)
-		os.Exit(-1)
 	}
 	db.SingularTable(true)                                      //全局设置表名不可以为复数形式。
 	db.DB().SetMaxIdleConns(Conf.DataSource.MaxIdleConnections) //空闲时最大的连接数
