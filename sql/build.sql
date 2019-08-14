@@ -42,3 +42,21 @@ create table article_attribute(
     attribute_code int(11)  not null comment '属性code 1:类型　2:作者　3:朝代　4:形式',
     attribute_value varchar(100) not null comment '属性值'
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8 comment '诗词的属性信息';
+
+
+drop function if exists shijing_attribute;
+
+delimiter $$
+drop procedure if exists `shijing_attribute`$$
+create procedure `shijing_attribute`()
+begin
+    DECLARE i int default 1;
+    WHILE (i < 306) DO
+    insert into article_attribute(article_id, attribute_code, attribute_value) VALUES (i, 1, 1);
+    insert into article_attribute(article_id, attribute_code, attribute_value) VALUES (i, 2, 1);
+    SET i = i + 1;
+    END WHILE;
+end$$
+
+delimiter ;
+call shijing_attribute();
