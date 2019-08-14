@@ -9,7 +9,7 @@ type AuthorResult struct {
 	Detail   string `json:"detail"`
 }
 
-func ConvertAuthorToResut(author model.Author) AuthorResult {
+func ConvertAuthorToResult(author model.Author) AuthorResult {
 	return AuthorResult{
 		author.AuthorId,
 		author.Name,
