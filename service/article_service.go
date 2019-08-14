@@ -6,16 +6,20 @@ import (
 	"terrorsaur/result"
 )
 
-const TableName = "article_type"
+const ArticleTypeTableName = "article_type"
+const ArticleTableName = "article"
 
 func FetchAllArticleType() []result.AncientArticleTypeResult {
 	var articleTypes []model.ArticleType
-	libs.Db.Table(TableName).Find(&articleTypes)
+	libs.Db.Table(ArticleTypeTableName).Find(&articleTypes)
 	return result.ConvertTypeResults(articleTypes)
 }
 
 func FetchArticleTypeByTypeId(typeId int) result.AncientArticleTypeResult {
 	var articleType model.ArticleType
-	libs.Db.Table(TableName).Where("type_id=?", typeId).First(&articleType)
+	libs.Db.Table(ArticleTypeTableName).Where("type_id=?", typeId).First(&articleType)
 	return result.ConvertTypeResult(articleType)
+}
+
+func FetchArticlePageData(typeId, pageNumber int) {
 }
