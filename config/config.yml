@@ -1,5 +1,5 @@
 server:
-  domain: 172.16.21.207
+  domain: localhost
   port: 12309
   name: Terrorsaru-Web Server
 dataSource:

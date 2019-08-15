@@ -21,5 +21,8 @@ func FetchArticleTypeByTypeId(typeId int) result.AncientArticleTypeResult {
 	return result.ConvertTypeResult(articleType)
 }
 
-func FetchArticlePageData(typeId, pageNumber int) {
+func FetchArticlePageData(typeId int) []result.ArticleResult {
+	var articles []model.Article
+	libs.Db.Table(ArticleTableName).Where("article_attribute.attribute_code=1 and article_attribute.attribute_value=?", typeId).Select("article.article_id,article.title").Joins("left join article_attribute on article.article_id = article_attribute.article_id").Limit(10).Offset(1).Find(&articles)
+	return result.ConvertArticleResults(articles)
 }

@@ -51,7 +51,9 @@ func route() (app *iris.Application) {
 	}
 	app.Get("/swagger/{any:path}", swagger.CustomWrapHandler(config, swaggerFiles.Handler))
 
-	v1 := app.Party("/v1", middleware.LogRequestInformationHandler).AllowMethods(iris.MethodOptions)
+	v1 := app.Party("/v1",
+		middleware.LogRequestInformationHandler,
+		middleware.EncapsulationPage).AllowMethods(iris.MethodOptions)
 	{
 		v1.PartyFunc("/api/rattrap/ancient-article", func(articleParty router.Party) {
 			articleParty.PartyFunc("/user", func(userParty router.Party) {
@@ -61,6 +63,7 @@ func route() (app *iris.Application) {
 				articleTypeParty.Get("/{typeId:int}/information", rest.ArticleTypeInformation)
 			})
 			articleParty.PartyFunc("/article", func(articleParty router.Party) {
+				articleParty.Get("/{typeId:int}", rest.ArticlesInformation)
 			})
 			articleParty.PartyFunc("/author", func(authorParty router.Party) {
 				authorParty.Get("/{authorId:int}/information", rest.AuthorInformation)

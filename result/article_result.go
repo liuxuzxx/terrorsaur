@@ -48,6 +48,14 @@ func ConvertTypeResult(articleType model.ArticleType) AncientArticleTypeResult {
 	}
 }
 
+func ConvertArticleResults(articles []model.Article) []ArticleResult {
+	articleResults := make([]ArticleResult, len(articles))
+	for index, value := range articles {
+		articleResults[index] = ConvertArticleResult(value)
+	}
+	return articleResults
+}
+
 func ConvertArticleResult(article model.Article) ArticleResult {
 	return ArticleResult{
 		ArticleId:  article.ArticleId,
