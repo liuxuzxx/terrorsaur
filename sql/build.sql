@@ -40,7 +40,7 @@ drop table if exists article_attribute;
 create table article_attribute(
     article_id int(11) not null comment '文章的ID',
     attribute_code int(11)  not null comment '属性code 1:类型　2:作者　3:朝代　4:形式',
-    attribute_value varchar(100) not null comment '属性值'
+    attribute_value int(11) not null comment '属性值'
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8 comment '诗词的属性信息';
 
 
