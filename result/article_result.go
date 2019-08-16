@@ -13,14 +13,15 @@ type AncientArticleTypeResult struct {
 }
 
 type ArticleResult struct {
-	ArticleId  int       `json:"articleId"`
-	Title      string    `json:"title"`
-	Content    string    `json:"content"`
-	Comment    string    `json:"comment"`
-	CreateBy   string    `json:"createBy"`
-	CreateTime time.Time `json:"createTime"`
-	UpdateBy   string    `json:"updateBy"`
-	UpdateTime time.Time `json:"updateTime"`
+	ArticleId  int                      `json:"articleId"`
+	Title      string                   `json:"title"`
+	Content    string                   `json:"content"`
+	Comment    string                   `json:"comment"`
+	CreateBy   string                   `json:"createBy"`
+	CreateTime time.Time                `json:"createTime"`
+	UpdateBy   string                   `json:"updateBy"`
+	UpdateTime time.Time                `json:"updateTime"`
+	Attributes []ArticleAttributeResult `json:"attributes"`
 }
 
 type ArticleAttributeResult struct {
@@ -75,4 +76,12 @@ func ConvertArticleAttributeResult(attribute model.ArticleAttribute) ArticleAttr
 		AttributeCode:  attribute.AttributeCode,
 		AttributeValue: attribute.AttributeValue,
 	}
+}
+
+func ConvertArticleAttributeResults(attributes []model.ArticleAttribute) []ArticleAttributeResult {
+	attributeResults := make([]ArticleAttributeResult, len(attributes))
+	for index, value := range attributes {
+		attributeResults[index] = ConvertArticleAttributeResult(value)
+	}
+	return attributeResults
 }

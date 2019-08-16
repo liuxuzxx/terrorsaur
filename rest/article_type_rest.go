@@ -1,7 +1,6 @@
 package rest
 
 import (
-	"fmt"
 	"github.com/kataras/iris"
 	"terrorsaur/common"
 	"terrorsaur/service"
@@ -20,8 +19,13 @@ func ArticleTypeInformation(ctx iris.Context) {
 
 func ArticlesInformation(ctx iris.Context) {
 	typeId, _ := ctx.Params().GetInt("typeId")
-	page := ctx.Params().Get("page")
-	fmt.Println("获取到的数据:", typeId, page)
-	articleResults := service.FetchArticlePageData(typeId)
+	page := common.ConvertToPage(ctx)
+	articleResults := service.FetchArticlePageData(typeId, page)
 	_, _ = ctx.JSON(common.Success(articleResults))
+}
+
+func ArticleDetailInformation(ctx iris.Context) {
+	articleId, _ := ctx.Params().GetInt("articleId")
+	detail := service.FetchArticleDetail(articleId)
+	_, _ = ctx.JSON(common.Success(detail))
 }
