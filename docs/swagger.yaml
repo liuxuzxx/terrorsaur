@@ -13,7 +13,39 @@ info:
   title: Terrorsaur-鸵鸟勇士
   version: "1.0"
 paths:
-  /api/rattrap/ancient-article/author/{authorId:
+  /api/rattrap/ancient-article/article-type/{typeId}/information:
+    get:
+      consumes:
+      - application/json
+      description: 根据文章的类型ID(typeId),获取文章类型的详细信息
+      produces:
+      - application/json
+      summary: 根据类型ID获取文章类型的详细信息
+  /api/rattrap/ancient-article/article-type/types:
+    get:
+      consumes:
+      - application/json
+      description: 全部文章类型的数据信息
+      produces:
+      - application/json
+      summary: 全部文章类型的数据
+  /api/rattrap/ancient-article/article/{articleId}/detail:
+    get:
+      consumes:
+      - application/json
+      description: 获取文章的详细信息,根据文章ID
+      produces:
+      - application/json
+      summary: 获取文章的详细信息
+  /api/rattrap/ancient-article/article/{typeId}:
+    get:
+      consumes:
+      - application/json
+      description: 根据类型typeId，获取该类型文章的分页数据信息
+      produces:
+      - application/json
+      summary: 根据类型获取文章的分页数据信息
+  /api/rattrap/ancient-article/author/{authorId}/information:
     get:
       consumes:
       - application/json
