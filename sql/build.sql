@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS ancient_article DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+use ancient_article;
 drop table if exists `article_type`;
 create table article_type(
     type_id int not null auto_increment primary key comment '自增的ID',
@@ -43,6 +45,9 @@ create table article_attribute(
     attribute_value int(11) not null comment '属性值'
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8 comment '诗词的属性信息';
 
+insert into author(name, dynasty, detail) values('广大劳动人民','中国','劳动人民总结生活中的物质，升华成了精神生活，俗语，歇后语和诗歌慢慢的演变而来');
+insert into author(name, dynasty, detail) values('佚名','中国','无姓无名之人');
+
 
 drop function if exists shijing_attribute;
 
@@ -60,3 +65,16 @@ end$$
 
 delimiter ;
 call shijing_attribute();
+
+
+drop table if exists idioms;
+create table idioms
+(
+    id      int(11) auto_increment not null comment '成语的ID' primary key ,
+    term  varchar(100) not null comment '成语',
+    pronunciation varchar(100) not null comment '发音',
+    interpretation varchar(1000) not null comment '释义',
+    source varchar(1000) comment '出处',
+    example varchar(2000) comment '例子'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8 comment '成语的信息';

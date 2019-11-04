@@ -1,7 +1,7 @@
 package rest
 
 import (
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 	"terrorsaur/common"
 	"terrorsaur/service"
 )
