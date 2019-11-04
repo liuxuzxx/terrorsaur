@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"fmt"
-	"github.com/kataras/iris/context"
+	"github.com/kataras/iris/v12/context"
 )
 
 func LogRequestInformationHandler(ctx context.Context) {

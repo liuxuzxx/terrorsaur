@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/iris-contrib/swagger"
-	"github.com/iris-contrib/swagger/swaggerFiles"
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/core/router"
-	"github.com/kataras/iris/middleware/logger"
-	"github.com/kataras/iris/middleware/recover"
+	"github.com/iris-contrib/swagger/v12"
+	"github.com/iris-contrib/swagger/v12/swaggerFiles"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/core/router"
+	"github.com/kataras/iris/v12/middleware/logger"
+	"github.com/kataras/iris/v12/middleware/recover"
 	"log"
 	"strconv"
 	_ "terrorsaur/docs"
