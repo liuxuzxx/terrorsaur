@@ -65,3 +65,16 @@ end$$
 
 delimiter ;
 call shijing_attribute();
+
+
+drop table if exists idioms;
+create table idioms
+(
+    id      int(11) auto_increment not null comment '成语的ID' primary key ,
+    term  varchar(100) not null comment '成语',
+    pronunciation varchar(100) not null comment '发音',
+    interpretation varchar(1000) not null comment '释义',
+    source varchar(1000) comment '出处',
+    example varchar(2000) comment '例子'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = UTF8 comment '成语的信息';
