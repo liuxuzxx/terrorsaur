@@ -18,7 +18,7 @@ type ArticleAttribute struct {
 }
 
 type Article struct {
-	ArticleId  int       `grom:"column:article_id"`
+	ArticleId  int       `gorm:"column:article_id"`
 	Title      string    `gorm:"column:title"`
 	Content    string    `gorm:"column:content"`
 	Comment    string    `gorm:"column:comment"`

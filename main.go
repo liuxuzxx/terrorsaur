@@ -68,6 +68,9 @@ func route() (app *iris.Application) {
 			articleParty.PartyFunc("/author", func(authorParty router.Party) {
 				authorParty.Get("/{authorId:int}/information", rest.AuthorInformation)
 			})
+			articleParty.PartyFunc("/phrase", func(phraseParty router.Party) {
+				phraseParty.Get("/information", rest.IdiomsInformation)
+			})
 		})
 	}
 	return app

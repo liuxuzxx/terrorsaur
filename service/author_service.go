@@ -6,7 +6,9 @@ import (
 	"terrorsaur/result"
 )
 
-const AuthorTableName = "author"
+const (
+	AuthorTableName string = "author"
+)
 
 func FetchAuthorByAuthorId(authorId int) result.AuthorResult {
 	var author model.Author
