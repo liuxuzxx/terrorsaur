@@ -7,9 +7,11 @@ import (
 	"terrorsaur/result"
 )
 
-const ArticleTypeTableName = "article_type"
-const ArticleTableName = "article"
-const ArticleAttributeTableName = "article_attribute"
+const (
+	ArticleTypeTableName      string = "article_type"
+	ArticleTableName          string = "article"
+	ArticleAttributeTableName string = "article_attribute"
+)
 
 func FetchAllArticleType() []result.AncientArticleTypeResult {
 	var articleTypes []model.ArticleType
