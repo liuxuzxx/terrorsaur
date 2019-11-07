@@ -6,6 +6,6 @@ import (
 )
 
 func LogRequestInformationHandler(ctx context.Context) {
-	fmt.Println("request信息内容是:", ctx.Host())
+	fmt.Println("request信息内容是:", ctx.Host()+ctx.Path())
 	ctx.Next()
 }

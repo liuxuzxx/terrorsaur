@@ -47,6 +47,7 @@ create table article_attribute(
 
 insert into author(name, dynasty, detail) values('广大劳动人民','中国','劳动人民总结生活中的物质，升华成了精神生活，俗语，歇后语和诗歌慢慢的演变而来');
 insert into author(name, dynasty, detail) values('佚名','中国','无姓无名之人');
+insert into author(name, dynasty, detail) values('屈原','中国','中国战国时期的有名辞人---楚国的最高法院院长');
 
 
 drop function if exists shijing_attribute;
@@ -78,3 +79,15 @@ create table idioms
     example varchar(2000) comment '例子'
 ) ENGINE = InnoDB
   DEFAULT CHARSET = UTF8 comment '成语的信息';
+
+
+drop table if exists `ancient_plate`;
+create table ancient_plate(
+                             plate_id int not null auto_increment primary key comment '自增的ID,板块ID',
+                             plate_name varchar(20) not null default '' comment '板块名字',
+                             detail varchar(2000) not null default '' comment '板块描述信息',
+                             plate_order int not null default -1 comment '显示的顺序'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='古文板块类型';
+
+insert into ancient_plate(plate_name, detail, plate_order) VALUES ('古诗词','古代的文章，包含诗词歌赋',1);
+insert into ancient_plate(plate_name, detail, plate_order) VALUES ('短语','所有的短语类型',2);

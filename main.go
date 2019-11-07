@@ -55,6 +55,9 @@ func route() (app *iris.Application) {
 		middleware.LogRequestInformationHandler).AllowMethods(iris.MethodOptions)
 	{
 		v1.PartyFunc("/api/rattrap/ancient-article", func(articleParty router.Party) {
+			articleParty.PartyFunc("/plate", func(plateParty router.Party) {
+				plateParty.Get("", rest.AncientPlateInformation)
+			})
 			articleParty.PartyFunc("/user", func(userParty router.Party) {
 			})
 			articleParty.PartyFunc("/article-type", func(articleTypeParty router.Party) {
@@ -62,7 +65,7 @@ func route() (app *iris.Application) {
 				articleTypeParty.Get("/{typeId:int}/information", rest.ArticleTypeInformation)
 			})
 			articleParty.PartyFunc("/article", func(articleParty router.Party) {
-				articleParty.Get("/{typeId:int}", rest.ArticlesInformation)
+				articleParty.Get("/{typeId:int}/articles", rest.ArticlesInformation)
 				articleParty.Get("/{articleId:int}/detail", rest.ArticleDetailInformation)
 			})
 			articleParty.PartyFunc("/author", func(authorParty router.Party) {
