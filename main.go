@@ -75,6 +75,11 @@ func route() (app *iris.Application) {
 				phraseParty.Get("/information", rest.IdiomsInformation)
 			})
 		})
+		v1.PartyFunc("/api/rattrap/dictionary", func(dictionaryParty router.Party) {
+			dictionaryParty.PartyFunc("/dictionary-types", func(dictionaryTypeParty router.Party) {
+				dictionaryTypeParty.Get("", rest.DictionaryTypeInformation)
+			})
+		})
 	}
 	return app
 }
