@@ -17,5 +17,6 @@ create table dictionary(
     id int not null auto_increment primary key comment '主键自增id',
     chinese_character varchar(20) not null comment '汉字',
     explanation varchar(1000) not null comment '汉字解释',
+    source varchar(2000) not null comment '来源语句',
     dictionary_type int not null comment '词典类型，来源于哪一种词典'
 );
