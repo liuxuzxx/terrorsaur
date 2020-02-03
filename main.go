@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/iris-contrib/swagger/v12"
 	"github.com/iris-contrib/swagger/v12/swaggerFiles"
 	"github.com/kataras/iris/v12"
@@ -31,7 +30,7 @@ import (
 // @host 172.16.21.207:12309
 // @BasePath /v1
 func main() {
-	fmt.Println("Terrorsaur Server is starting...")
+	log.Printf("Terrorsaur Server is starting...")
 
 	app := route()
 	app.Logger().SetLevel("debug")
@@ -85,6 +84,6 @@ func route() (app *iris.Application) {
 }
 
 func init() {
-	fmt.Println("初始化一些配置和数据库信息的操作")
+	log.Println("初始化一些配置和数据库信息的操作")
 	libs.Db = libs.InitDB()
 }
