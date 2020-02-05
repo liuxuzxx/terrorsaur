@@ -14,6 +14,14 @@ type DictionaryTypeResult struct {
 	DictionaryName string `json:"dictionaryName"`
 }
 
+type DictionaryResult struct {
+	Id               int    `json:"id"`
+	ChineseCharacter string `json:"chineseCharacter"`
+	Explanation      string `json:"explanation"`
+	Source           string `json:"source"`
+	DictionaryType   int    `json:"dictionaryType"`
+}
+
 func ConvertDictionaryTypeToResult(dictionaryType model.DictionaryType) DictionaryTypeResult {
 	return DictionaryTypeResult{
 		Id:             dictionaryType.Id,
@@ -29,4 +37,14 @@ func ConvertDictionaryTypeToResults(types []model.DictionaryType) []DictionaryTy
 		typeResults[index] = ConvertDictionaryTypeToResult(value)
 	}
 	return typeResults
+}
+
+func ConvertDictionaryToResult(dictionary model.Dictionary) DictionaryResult {
+	return DictionaryResult{
+		Id:               dictionary.Id,
+		ChineseCharacter: dictionary.ChineseCharacter,
+		Explanation:      dictionary.Explanation,
+		Source:           dictionary.Source,
+		DictionaryType:   dictionary.DictionaryType,
+	}
 }

@@ -10,5 +10,14 @@ package model
 type DictionaryType struct {
 	Id             int    `gorm:"column:id"`
 	DictionaryCode string `gorm:"column:dictionary_code"`
-	DictionaryName string `gorm:"column:dictioanry_name"`
+	DictionaryName string `gorm:"column:dictionary_name"`
+}
+
+//单个字体信息实体类
+type Dictionary struct {
+	Id               int    `gorm:"column:id"`
+	ChineseCharacter string `gorm:"column:chinese_character"`
+	Explanation      string `gorm:"column:explanation"`
+	Source           string `gorm:"column:source"`
+	DictionaryType   int    `gorm:"column:dictionary_type"`
 }

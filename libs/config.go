@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
+	"log"
 )
 
 type Config struct {
@@ -31,7 +32,7 @@ type DataSource struct {
 var Conf Config
 
 func init() {
-	fmt.Println("Load config information from config directory!")
+	log.Println("Load config information from config directory!")
 	viper.AddConfigPath("./config")
 	viper.SetConfigName("config")
 	viper.WatchConfig()
