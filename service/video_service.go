@@ -2,7 +2,9 @@ package service
 
 import (
 	"os"
+	"path"
 	"path/filepath"
+	"strings"
 	"terrorsaur/model"
 )
 
@@ -17,15 +19,49 @@ func VideoFiles(rootPath string) []model.VideoFile {
 
 func walkFiles(rootPath string) []model.VideoFile {
 	var videoFileList []model.VideoFile
-	_ = filepath.Walk(rootPath, func(path string, fileInfo os.FileInfo, err error) error {
-
-		videoFileList = append(videoFileList, model.VideoFile{
-			FilePath:  path,
-			VideoType: 0,
-			FileName:  fileInfo.Name(),
-			Size:      fileInfo.Size(),
-		})
+	_ = filepath.Walk(rootPath, func(filePath string, fileInfo os.FileInfo, err error) error {
+		videoType, ok := verifyVideoType(fileInfo.Name())
+		if ok {
+			videoFileList = append(videoFileList, model.VideoFile{
+				FilePath:  filePath,
+				VideoType: videoType,
+				FileName:  fileInfo.Name(),
+				Size:      fileInfo.Size(),
+			})
+		}
 		return nil
 	})
 	return videoFileList
+}
+
+var fileType = map[string]model.VideoType{
+	".MP4": {
+		TypeCode: 1,
+		TypeName: "mp4",
+	},
+	".FLV": {
+		TypeCode: 2,
+		TypeName: "FLV",
+	},
+	".MKV": {
+		TypeCode: 3,
+		TypeName: "mkv",
+	},
+	".JAVA": {
+		TypeCode: 5,
+		TypeName: "Java文件类型",
+	},
+	"UNKNOWN": {
+		TypeCode: 4,
+		TypeName: "未知类型",
+	},
+}
+
+func verifyVideoType(filePath string) (model.VideoType, bool) {
+	fileSuffix := path.Ext(filePath)
+	videoType, ok := fileType[strings.ToUpper(fileSuffix)]
+	if ok {
+		return videoType, true
+	}
+	return fileType["UNKNOWN"], false
 }

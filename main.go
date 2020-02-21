@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/iris-contrib/middleware/cors"
 	"github.com/iris-contrib/swagger/v12"
 	"github.com/iris-contrib/swagger/v12/swaggerFiles"
 	"github.com/kataras/iris/v12"
@@ -46,13 +47,17 @@ func main() {
 
 func route() (app *iris.Application) {
 	app = iris.New()
+	crs := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"}, //允许通过的主机名称
+		AllowCredentials: true,
+	})
 	config := &swagger.Config{
 		URL: "http://" + libs.Conf.Server.Domain + ":" + strconv.Itoa(libs.Conf.Server.Port) + "/swagger/doc.json", //The url pointing to API definition
 	}
 	app.Get("/swagger/{any:path}", swagger.CustomWrapHandler(config, swaggerFiles.Handler))
 
 	v1 := app.Party("/v1",
-		middleware.LogRequestInformationHandler).AllowMethods(iris.MethodOptions)
+		middleware.LogRequestInformationHandler, crs).AllowMethods(iris.MethodOptions)
 	{
 		v1.PartyFunc("/api/rattrap/ancient-article", func(articleParty router.Party) {
 			articleParty.PartyFunc("/plate", func(plateParty router.Party) {
