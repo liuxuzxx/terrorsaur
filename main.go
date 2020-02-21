@@ -80,6 +80,11 @@ func route() (app *iris.Application) {
 				dictionaryTypeParty.Get("", rest.DictionaryTypeInformation)
 			})
 		})
+		v1.PartyFunc("/api/rattrap/video", func(videoParty router.Party) {
+			videoParty.PartyFunc("/micro-video", func(microParty router.Party) {
+				microParty.Get("", rest.VideoPlayer)
+			})
+		})
 	}
 	return app
 }
