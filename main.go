@@ -84,6 +84,9 @@ func route() (app *iris.Application) {
 			videoParty.PartyFunc("/micro-video", func(microParty router.Party) {
 				microParty.Get("", rest.VideoPlayer)
 			})
+			videoParty.PartyFunc("/video-files", func(videoFilesParty router.Party) {
+				videoFilesParty.Get("", rest.VideoFiles)
+			})
 		})
 	}
 	return app

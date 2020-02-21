@@ -7,6 +7,8 @@ import (
 	"github.com/nareix/joy4/av/avutil"
 	"github.com/nareix/joy4/format"
 	"io/ioutil"
+	"terrorsaur/common"
+	"terrorsaur/service"
 )
 
 //
@@ -40,4 +42,10 @@ func VideoPlayer(ctx iris.Context) {
 	}
 	ctx.ContentType("video/mp4")
 	ctx.Write(readFile)
+}
+
+func VideoFiles(ctx iris.Context) {
+	rootPath := "/home/liuxu/Downloads"
+	files := service.VideoFiles(rootPath)
+	_, _ = ctx.JSON(common.Success(files))
 }
