@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"github.com/iris-contrib/middleware/cors"
 	"github.com/iris-contrib/swagger/v12"
 	"github.com/iris-contrib/swagger/v12/swaggerFiles"
 	"github.com/kataras/iris/v12"
@@ -30,7 +32,7 @@ import (
 // @host 172.16.21.207:12309
 // @BasePath /v1
 func main() {
-	log.Printf("Terrorsaur Server is starting...")
+	fmt.Println("Terrorsaur Server is starting...")
 
 	app := route()
 	app.Logger().SetLevel("debug")
@@ -45,13 +47,17 @@ func main() {
 
 func route() (app *iris.Application) {
 	app = iris.New()
+	crs := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"}, //允许通过的主机名称
+		AllowCredentials: true,
+	})
 	config := &swagger.Config{
 		URL: "http://" + libs.Conf.Server.Domain + ":" + strconv.Itoa(libs.Conf.Server.Port) + "/swagger/doc.json", //The url pointing to API definition
 	}
 	app.Get("/swagger/{any:path}", swagger.CustomWrapHandler(config, swaggerFiles.Handler))
 
 	v1 := app.Party("/v1",
-		middleware.LogRequestInformationHandler).AllowMethods(iris.MethodOptions)
+		middleware.LogRequestInformationHandler, crs).AllowMethods(iris.MethodOptions)
 	{
 		v1.PartyFunc("/api/rattrap/ancient-article", func(articleParty router.Party) {
 			articleParty.PartyFunc("/plate", func(plateParty router.Party) {
@@ -79,11 +85,19 @@ func route() (app *iris.Application) {
 				dictionaryTypeParty.Get("", rest.DictionaryTypeInformation)
 			})
 		})
+		v1.PartyFunc("/api/rattrap/video", func(videoParty router.Party) {
+			videoParty.PartyFunc("/micro-video", func(microParty router.Party) {
+				microParty.Get("", rest.VideoPlayer)
+			})
+			videoParty.PartyFunc("/video-files", func(videoFilesParty router.Party) {
+				videoFilesParty.Get("", rest.VideoFiles)
+			})
+		})
 	}
 	return app
 }
 
 func init() {
-	log.Println("初始化一些配置和数据库信息的操作")
+	fmt.Println("初始化一些配置和数据库信息的操作")
 	libs.Db = libs.InitDB()
 }
