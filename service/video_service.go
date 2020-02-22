@@ -1,11 +1,14 @@
 package service
 
 import (
+	"log"
 	"os"
 	"path"
 	"path/filepath"
 	"strings"
+	"terrorsaur/libs"
 	"terrorsaur/model"
+	"terrorsaur/result"
 )
 
 //
@@ -13,20 +16,20 @@ import (
 // @Author 刘旭
 // 视频服务操作
 
-func VideoFiles(rootPath string) []model.VideoFile {
-	return walkFiles(rootPath)
-}
+const (
+	VideoFileTableName string = "video_file"
+	RootPath           string = "/media/liuxu/data/leonard/relax"
+)
 
 func walkFiles(rootPath string) []model.VideoFile {
 	var videoFileList []model.VideoFile
 	_ = filepath.Walk(rootPath, func(filePath string, fileInfo os.FileInfo, err error) error {
-		videoType, ok := verifyVideoType(fileInfo.Name())
+		_, ok := verifyVideoType(fileInfo.Name())
 		if ok {
 			videoFileList = append(videoFileList, model.VideoFile{
-				FilePath:  filePath,
-				VideoType: videoType,
-				FileName:  fileInfo.Name(),
-				Size:      fileInfo.Size(),
+				FilePath: filePath,
+				FileName: fileInfo.Name(),
+				Size:     fileInfo.Size(),
 			})
 		}
 		return nil
@@ -49,7 +52,7 @@ var fileType = map[string]model.VideoType{
 	},
 	".F4V": {
 		TypeCode: 5,
-		TypeName: "F4V",
+		TypeName: "f4v",
 	},
 	"AVI": {
 		TypeCode: 6,
@@ -80,4 +83,28 @@ func verifyVideoType(filePath string) (model.VideoType, bool) {
 		return videoType, true
 	}
 	return fileType["UNKNOWN"], false
+}
+
+func FetchAllVideoFiles() []result.VideoFileResult {
+	var videoFiles []model.VideoFile
+	libs.Db.Table(VideoFileTableName).Find(&videoFiles)
+	return result.ConvertVideoFileToResults(videoFiles)
+}
+
+func FetchVideoFile(videoId int64) result.VideoFileResult {
+	var videoFile model.VideoFile
+	libs.Db.Table(VideoFileTableName).Where("video_id=?", videoId).First(&videoFile)
+	return result.ConvertVideoFileToResult(videoFile)
+}
+
+func registerVideoFiles(videoFiles []model.VideoFile) {
+	for _, value := range videoFiles {
+		libs.Db.Table(VideoFileTableName).Create(&value)
+	}
+}
+
+func init() {
+	log.Printf("初始化视频服务数据!")
+	//videoFiles := walkFiles(RootPath)
+	//registerVideoFiles(videoFiles)
 }

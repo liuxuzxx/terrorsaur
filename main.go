@@ -86,7 +86,7 @@ func route() (app *iris.Application) {
 			})
 		})
 		v1.PartyFunc("/api/rattrap/video", func(videoParty router.Party) {
-			videoParty.PartyFunc("/micro-video", func(microParty router.Party) {
+			videoParty.PartyFunc("/{videoId:int64}/play-video", func(microParty router.Party) {
 				microParty.Get("", rest.VideoPlayer)
 			})
 			videoParty.PartyFunc("/video-files", func(videoFilesParty router.Party) {
@@ -95,9 +95,4 @@ func route() (app *iris.Application) {
 		})
 	}
 	return app
-}
-
-func init() {
-	fmt.Println("初始化一些配置和数据库信息的操作")
-	libs.Db = libs.InitDB()
 }

@@ -3,8 +3,6 @@ package rest
 import (
 	"fmt"
 	"github.com/kataras/iris/v12"
-	"github.com/nareix/joy4/av"
-	"github.com/nareix/joy4/av/avutil"
 	"github.com/nareix/joy4/format"
 	"io/ioutil"
 	"terrorsaur/common"
@@ -20,23 +18,9 @@ func init() {
 }
 
 func VideoPlayer(ctx iris.Context) {
-	videoPath := "/home/liuxu/Downloads/mociro-unit.mp4"
-	file, _ := avutil.Open(videoPath)
-	streams, _ := file.Streams()
-	for _, stream := range streams {
-		if stream.Type().IsAudio() {
-			astream := stream.(av.AudioCodecData)
-			fmt.Println(astream.Type(), astream.SampleRate(), astream.SampleFormat(), astream.ChannelLayout())
-		} else if stream.Type().IsVideo() {
-			vstream := stream.(av.VideoCodecData)
-			fmt.Println("是一个video")
-			fmt.Println(vstream.Type(), vstream.Width(), vstream.Height())
-		}
-	}
-
-	file.Close()
-
-	readFile, err := ioutil.ReadFile(videoPath)
+	videoId, _ := ctx.Params().GetInt64("videoId")
+	videoFileResult := service.FetchVideoFile(videoId)
+	readFile, err := ioutil.ReadFile(videoFileResult.FilePath)
 	if err != nil {
 		fmt.Println("读取信息出现错误")
 	}
@@ -45,7 +29,6 @@ func VideoPlayer(ctx iris.Context) {
 }
 
 func VideoFiles(ctx iris.Context) {
-	rootPath := "/media/liuxu/data/leonard/relax"
-	files := service.VideoFiles(rootPath)
+	files := service.FetchAllVideoFiles()
 	_, _ = ctx.JSON(common.Success(files))
 }
