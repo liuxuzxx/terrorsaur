@@ -47,12 +47,28 @@ var fileType = map[string]model.VideoType{
 		TypeCode: 3,
 		TypeName: "mkv",
 	},
-	".JAVA": {
+	".F4V": {
 		TypeCode: 5,
-		TypeName: "Java文件类型",
+		TypeName: "F4V",
+	},
+	"AVI": {
+		TypeCode: 6,
+		TypeName: "avi",
+	},
+	"WMV": {
+		TypeCode: 7,
+		TypeName: "wmv",
+	},
+	"MOV": {
+		TypeCode: 8,
+		TypeName: "mov",
+	},
+	"RMVB": {
+		TypeCode: 9,
+		TypeName: "rmvb",
 	},
 	"UNKNOWN": {
-		TypeCode: 4,
+		TypeCode: -1,
 		TypeName: "未知类型",
 	},
 }
