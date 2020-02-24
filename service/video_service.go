@@ -18,7 +18,7 @@ import (
 
 const (
 	VideoFileTableName string = "video_file"
-	RootPath           string = "/media/liuxu/data/leonard/relax"
+	RootPath           string = "/media/liuxu/LiuXu/crow/source"
 )
 
 func walkFiles(rootPath string) []model.VideoFile {
