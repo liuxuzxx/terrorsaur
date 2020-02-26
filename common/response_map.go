@@ -9,5 +9,5 @@ func Success(data interface{}) iris.Map {
 }
 
 func Failure(information interface{}) iris.Map {
-	return iris.Map{"code": 1, "message": "failure", "data": information}
+	return iris.Map{"code": -1, "message": "failure", "data": information}
 }

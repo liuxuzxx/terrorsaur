@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"github.com/kataras/iris/v12"
 	"github.com/nareix/joy4/format"
-	"io/ioutil"
+	"io"
+	"os"
+	"strconv"
 	"terrorsaur/common"
+	"terrorsaur/result"
 	"terrorsaur/service"
 )
 
@@ -18,17 +21,41 @@ func init() {
 }
 
 func VideoPlayer(ctx iris.Context) {
+	var startRange, endRange int64
+
+	_, _ = fmt.Sscanf(ctx.GetHeader("Range"), "bytes=%d-%d", &startRange, &endRange)
 	videoId, _ := ctx.Params().GetInt64("videoId")
 	videoFileResult := service.FetchVideoFile(videoId)
-	readFile, err := ioutil.ReadFile(videoFileResult.FilePath)
-	if err != nil {
-		fmt.Println("读取信息出现错误")
+
+	videoFile, videoFileErr := os.Open(videoFileResult.FilePath)
+	if videoFileErr != nil {
+		ctx.NotFound()
+		return
 	}
-	ctx.ContentType("video/mp4")
-	ctx.Write(readFile)
+	videoFileInfo, _ := videoFile.Stat()
+	if endRange == 0 {
+		endRange = videoFileInfo.Size() - 1
+	}
+	ctx.Header("Accept-Ranges", "bytes")
+	ctx.Header("Content-Length", strconv.FormatInt(endRange-startRange+1, 10))
+	ctx.Header("Content-Range", "bytes "+strconv.FormatInt(startRange, 10)+"-"+strconv.FormatInt(endRange, 10)+"/"+strconv.FormatInt(videoFileInfo.Size(), 10))
+	ctx.Header("Content-Disposition", "attachment; filename="+videoFileInfo.Name())
+
+	_, seekErr := videoFile.Seek(startRange, 0)
+	if seekErr != nil {
+		ctx.NotFound()
+	}
+	ctx.StatusCode(206)
+	_, _ = io.CopyN(ctx, videoFile, endRange-startRange+1)
 }
 
 func VideoFiles(ctx iris.Context) {
 	files := service.FetchAllVideoFiles()
 	_, _ = ctx.JSON(common.Success(files))
+}
+
+func CutVideoRegister(ctx iris.Context) {
+	var cutVideoRequest result.CutVideoRequest
+	_ = ctx.ReadJSON(&cutVideoRequest)
+	_, _ = ctx.JSON(common.Success("成功注册切割视频"))
 }

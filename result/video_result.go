@@ -14,6 +14,12 @@ type VideoFileResult struct {
 	Size     int64  `json:"size"`
 }
 
+type CutVideoRequest struct {
+	StartTime string `json:"startTime"`
+	EndTime   string `json:"endTime"`
+	ParentId  int64  `json:"parentId"`
+}
+
 func ConvertVideoFileToResult(videoFile model.VideoFile) VideoFileResult {
 	return VideoFileResult{
 		VideoId:  videoFile.VideoId,

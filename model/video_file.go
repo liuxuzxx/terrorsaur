@@ -16,3 +16,12 @@ type VideoType struct {
 	TypeCode int8
 	TypeName string
 }
+
+type CutVideo struct {
+	CutId     int64  `gorm:"column:cut_id"`
+	ParentId  int64  `gorm:"column:parent_id"`
+	StartTime string `gorm:"column:start_time"`
+	EndTime   string `gorm:"column:end_time"`
+	Name      string `gorm:"column:name"`
+	Status    int64  `gorm:"column:status"`
+}
