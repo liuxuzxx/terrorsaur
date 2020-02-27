@@ -15,6 +15,7 @@ import (
 	"terrorsaur/libs"
 	"terrorsaur/middleware"
 	"terrorsaur/rest"
+	_ "terrorsaur/task"
 )
 
 // @title Terrorsaur-鸵鸟勇士

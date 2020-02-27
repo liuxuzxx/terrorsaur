@@ -12,4 +12,5 @@ require (
 	github.com/nareix/joy4 v0.0.0-20181022032202-3ddbc8f9d431
 	github.com/spf13/viper v1.6.2
 	github.com/swaggo/swag v1.6.5
+	golang.org/x/tools v0.0.0-20190614205625-5aca471b1d59
 )

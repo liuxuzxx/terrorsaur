@@ -19,6 +19,7 @@ import (
 const (
 	VideoFileTableName string = "video_file"
 	RootPath           string = "/media/liuxu/LiuXu/crow/source"
+	TargetRootPath     string = "/media/liuxu/LiuXu/crow/target"
 	CutVideo           string = "cut_video"
 )
 
