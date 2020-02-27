@@ -94,6 +94,7 @@ func route() (app *iris.Application) {
 			})
 			videoParty.PartyFunc("/cut-video", func(cutVideoParty router.Party) {
 				cutVideoParty.Post("", rest.CutVideoRegister)
+				cutVideoParty.Get("/{parentId:int64}/videos", rest.FetchCutVideos)
 			})
 		})
 	}

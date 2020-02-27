@@ -19,6 +19,7 @@ import (
 const (
 	VideoFileTableName string = "video_file"
 	RootPath           string = "/media/liuxu/LiuXu/crow/source"
+	CutVideo           string = "cut_video"
 )
 
 func walkFiles(rootPath string) []model.VideoFile {
@@ -95,6 +96,20 @@ func FetchVideoFile(videoId int64) result.VideoFileResult {
 	var videoFile model.VideoFile
 	libs.Db.Table(VideoFileTableName).Where("video_id=?", videoId).First(&videoFile)
 	return result.ConvertVideoFileToResult(videoFile)
+}
+
+func RegisterCutVideo(request result.CutVideoRequest) {
+	cutVideo := result.ConvertCutVideoRequestTo(request)
+	var videoFile model.VideoFile
+	libs.Db.Table(VideoFileTableName).Where("video_id=?", request.ParentId).First(&videoFile)
+	cutVideo.Name = strings.Join([]string{request.StartTime, request.EndTime, videoFile.FileName}, "-")
+	libs.Db.Table(CutVideo).Create(&cutVideo)
+}
+
+func FetchAllCutById(parentId int64) []result.CutVideoResult {
+	var videos []model.CutVideo
+	libs.Db.Table(CutVideo).Where("parent_id=?", parentId).Find(&videos)
+	return result.ConvertCutVideoToResults(videos)
 }
 
 func registerVideoFiles(videoFiles []model.VideoFile) {

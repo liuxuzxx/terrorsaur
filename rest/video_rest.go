@@ -57,5 +57,11 @@ func VideoFiles(ctx iris.Context) {
 func CutVideoRegister(ctx iris.Context) {
 	var cutVideoRequest result.CutVideoRequest
 	_ = ctx.ReadJSON(&cutVideoRequest)
+	service.RegisterCutVideo(cutVideoRequest)
 	_, _ = ctx.JSON(common.Success("成功注册切割视频"))
+}
+
+func FetchCutVideos(ctx iris.Context) {
+	parentId, _ := ctx.Params().GetInt64("parentId")
+	_, _ = ctx.JSON(common.Success(service.FetchAllCutById(parentId)))
 }
