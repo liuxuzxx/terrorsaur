@@ -87,8 +87,9 @@ func route() (app *iris.Application) {
 			})
 		})
 		v1.PartyFunc("/api/rattrap/video", func(videoParty router.Party) {
-			videoParty.PartyFunc("/{videoId:int64}/play-video", func(microParty router.Party) {
-				microParty.Get("", rest.VideoPlayer)
+			videoParty.PartyFunc("/video-file", func(microParty router.Party) {
+				microParty.Get("/{videoId:int64}/play-video", rest.VideoPlayer)
+				microParty.Get("/{videoId:int64}/header-frame", rest.FetchHeaderFrame)
 			})
 			videoParty.PartyFunc("/video-files", func(videoFilesParty router.Party) {
 				videoFilesParty.Get("", rest.VideoFiles)

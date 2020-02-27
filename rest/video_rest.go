@@ -5,6 +5,7 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/nareix/joy4/format"
 	"io"
+	"io/ioutil"
 	"os"
 	"strconv"
 	"terrorsaur/common"
@@ -64,4 +65,14 @@ func CutVideoRegister(ctx iris.Context) {
 func FetchCutVideos(ctx iris.Context) {
 	parentId, _ := ctx.Params().GetInt64("parentId")
 	_, _ = ctx.JSON(common.Success(service.FetchAllCutById(parentId)))
+}
+
+func FetchHeaderFrame(ctx iris.Context) {
+	videoId, _ := ctx.Params().GetInt64("videoId")
+	bytes, videoFileErr := ioutil.ReadFile(service.FetchHeadFrame(videoId))
+	if videoFileErr != nil {
+		ctx.NotFound()
+		return
+	}
+	_, _ = ctx.Write(bytes)
 }
