@@ -48,7 +48,7 @@ func main() {
 func route() (app *iris.Application) {
 	app = iris.New()
 	crs := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"}, //允许通过的主机名称
+		AllowedOrigins:   []string{"*"},
 		AllowCredentials: true,
 	})
 	config := &swagger.Config{
