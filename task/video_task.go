@@ -9,7 +9,6 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
-	"terrorsaur/libs"
 	"terrorsaur/model"
 	"terrorsaur/service"
 )
@@ -159,7 +158,7 @@ func verifyVideoType(filePath string) (model.VideoType, bool) {
 
 func init() {
 	log.Printf("启动视频剪切的任务")
-	var cutVideoTask = CutVideoTask{
+	/*var cutVideoTask = CutVideoTask{
 		Db: libs.Db,
 	}
 	cutVideoTask.Start()
@@ -167,5 +166,5 @@ func init() {
 	var videoFileTask = VideoFileTask{
 		Db: libs.Db,
 	}
-	videoFileTask.Start()
+	videoFileTask.Start()*/
 }
