@@ -10,13 +10,21 @@ import (
 	"path/filepath"
 	"strings"
 	"terrorsaur/model"
-	"terrorsaur/service"
 )
 
 //
 // @date   2020-02-27 14:47:47
 // @author 刘旭
 // 切割视频任务的操作
+
+const (
+	VideoFileTableName string = "video_file"
+	CutVideoTableName  string = "cut_video"
+	SourceRootPath     string = "/media/liuxu/LiuXu/crow/source"
+	TargetRootPath     string = "/media/liuxu/LiuXu/crow/result"
+	FramePath          string = "/poster"
+	VideoPath          string = "/video"
+)
 
 type CutVideoTask struct {
 	Db *gorm.DB
@@ -29,26 +37,32 @@ func (c *CutVideoTask) Start() {
 
 func (c *CutVideoTask) loadTask() []model.CutVideo {
 	var cutVideos []model.CutVideo
-	c.Db.Table(service.CutVideoTableName).Where("status!=?", 3).Find(&cutVideos)
+	c.Db.Table(CutVideoTableName).Where("status!=?", 3).Find(&cutVideos)
 	return cutVideos
 }
 
 func (c *CutVideoTask) startTask(cutVideos []model.CutVideo) {
 	for _, value := range cutVideos {
-		c.executeTask(value)
+		c.ExecuteTask(value)
 	}
 }
 
-func (c *CutVideoTask) executeTask(video model.CutVideo) {
+func (c *CutVideoTask) ExecuteTask(video model.CutVideo) {
 	var videoFile model.VideoFile
-	c.Db.Table(service.VideoFileTableName).Where("video_id=?", video.ParentId).First(&videoFile)
+	c.Db.Table(VideoFileTableName).Where("video_id=?", video.ParentId).First(&videoFile)
 
-	targetPath := path.Join(service.TargetRootPath, video.Name)
+	targetPath := path.Join(TargetRootPath, VideoPath, video.Name)
 
 	commandFormat := "ffmpeg -ss %s -to %s -i %s -c:v libx264 -c:a aac -strict experimental -b:a 98k %s"
 	command := fmt.Sprintf(commandFormat, video.StartTime, video.EndTime, videoFile.FilePath, targetPath)
-	log.Printf("执行的命令字符串是:%s\n", command)
-	//execCommand(command)
+	log.Printf("切割视频执行命令:%s\n", command)
+	err := execCommand(command)
+	if err != nil {
+		log.Printf("截取视频失败!，视频信息是:%s\n", targetPath)
+	} else {
+		log.Printf("截取视频成功!,视频是:%s\n", targetPath)
+		c.Db.Table(CutVideoTableName).Where("cut_id=?", video.CutId).Update(model.CutVideo{FilePath: targetPath, Status: 3})
+	}
 }
 
 type VideoFileTask struct {
@@ -56,9 +70,8 @@ type VideoFileTask struct {
 }
 
 func (v *VideoFileTask) Start() {
-	videoFiles := v.walkFiles(service.SourceRootPath)
-	//v.registerVideoFiles(videoFiles)
-	v.takeFrame(videoFiles)
+	videoFiles := v.walkFiles(SourceRootPath)
+	v.registerVideoFiles(videoFiles)
 }
 
 func (v *VideoFileTask) walkFiles(rootPath string) []model.VideoFile {
@@ -79,33 +92,37 @@ func (v *VideoFileTask) walkFiles(rootPath string) []model.VideoFile {
 	return videoFileList
 }
 
-func (v *VideoFileTask) registerVideoFiles(videoFiles []model.VideoFile) {
+func (v *VideoFileTask) registerVideoFiles(videoFiles []model.VideoFile) []model.VideoFile {
+	var count int
 	for _, value := range videoFiles {
-		v.Db.Table(service.VideoFileTableName).Create(&value)
-	}
-}
-
-func (v *VideoFileTask) takeFrame(videoFiles []model.VideoFile) {
-	commandFormat := "ffmpeg -i %s -r 1 -q:v 2 -f image2 %s/%s.jpg"
-	for _, value := range videoFiles {
-		dir := filepath.Dir(value.FilePath)
-		frameDir := filepath.Join(dir, service.FramePath, value.FileName)
-		err := os.MkdirAll(frameDir, os.ModePerm)
-		if err != nil {
-			log.Printf("err")
+		v.Db.Table(VideoFileTableName).Where("file_path=?", value.FilePath).Count(&count)
+		if count == 0 {
+			v.Db.Table(VideoFileTableName).Create(&value)
+			go v.takeFrame(value)
 		}
-		command := fmt.Sprintf(commandFormat, value.FilePath, frameDir, "%d")
-		log.Printf("执行takeFrame命令:%s", command)
-		//execCommand(command)
 	}
+	return videoFiles
 }
 
-func execCommand(command string) {
+func (v *VideoFileTask) takeFrame(value model.VideoFile) {
+	commandFormat := "ffmpeg -ss 3 -i %s -vf \"select=gt(scene\\,0.4)\" -frames:v 1 -vsync vfr -vf fps=fps=1/600 %s/%d.jpg"
+	frameDir := filepath.Join(SourceRootPath, FramePath)
+	err := os.MkdirAll(frameDir, os.ModePerm)
+	if err != nil {
+		log.Printf("err")
+	}
+	command := fmt.Sprintf(commandFormat, value.FilePath, frameDir, value.VideoId)
+	log.Printf("执行takeFrame命令:%s", command)
+	_ = execCommand(command)
+}
+
+func execCommand(command string) error {
 	cmd := exec.Command("/bin/bash", "-c", command)
 	err := cmd.Run()
 	if err != nil {
 		log.Print(err)
 	}
+	return err
 }
 
 var fileType = map[string]model.VideoType{
@@ -157,13 +174,7 @@ func verifyVideoType(filePath string) (model.VideoType, bool) {
 }
 
 func init() {
-	log.Printf("启动视频剪切的任务")
-	/*var cutVideoTask = CutVideoTask{
-		Db: libs.Db,
-	}
-	cutVideoTask.Start()
-
-	var videoFileTask = VideoFileTask{
+	/*var videoFileTask = VideoFileTask{
 		Db: libs.Db,
 	}
 	videoFileTask.Start()*/

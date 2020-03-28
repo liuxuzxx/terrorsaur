@@ -6,10 +6,11 @@ package model
 //主要是存放有关于视频的实体类的对象
 
 type VideoFile struct {
-	VideoId  int64  `gorm:"column:video_id"`
+	VideoId  int64  `gorm:"primary_key;column:video_id"`
 	FilePath string `gorm:"column:file_path"`
 	FileName string `gorm:"column:file_name"`
 	Size     int64  `gorm:"column:size"`
+	Poster   string `gorm:"column:poster"`
 }
 
 type VideoType struct {
@@ -24,4 +25,6 @@ type CutVideo struct {
 	EndTime   string `gorm:"column:end_time"`
 	Name      string `gorm:"column:name"`
 	Status    int64  `gorm:"column:status"`
+	Poster    string `gorm:"column:poster"`
+	FilePath  string `gorm:"column:file_path"`
 }
