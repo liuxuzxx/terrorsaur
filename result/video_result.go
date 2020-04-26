@@ -12,6 +12,7 @@ type VideoFileResult struct {
 	FilePath string `json:"filePath"`
 	FileName string `json:"fileName"`
 	Size     int64  `json:"size"`
+	Poster   string `json:"poster"`
 }
 
 type CutVideoRequest struct {
@@ -27,6 +28,8 @@ type CutVideoResult struct {
 	EndTime   string `json:"endTime"`
 	Name      string `json:"name"`
 	Status    int64  `json:"status"`
+	Poster    string `json:"poster"`
+	FilePath  string `json:"filePath"`
 }
 
 func ConvertVideoFileToResult(videoFile model.VideoFile) VideoFileResult {
@@ -35,6 +38,7 @@ func ConvertVideoFileToResult(videoFile model.VideoFile) VideoFileResult {
 		FilePath: videoFile.FilePath,
 		FileName: videoFile.FileName,
 		Size:     videoFile.Size,
+		Poster:   videoFile.Poster,
 	}
 }
 
@@ -63,6 +67,8 @@ func ConvertCutVideoToResult(video model.CutVideo) CutVideoResult {
 		EndTime:   video.EndTime,
 		Name:      video.Name,
 		Status:    video.Status,
+		Poster:    video.Poster,
+		FilePath:  video.FilePath,
 	}
 }
 

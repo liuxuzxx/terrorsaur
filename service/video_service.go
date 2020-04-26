@@ -6,6 +6,7 @@ import (
 	"terrorsaur/libs"
 	"terrorsaur/model"
 	"terrorsaur/result"
+	"terrorsaur/task"
 )
 
 //
@@ -18,8 +19,11 @@ const (
 	CutVideoTableName  string = "cut_video"
 	SourceRootPath     string = "/media/liuxu/LiuXu/crow/source"
 	TargetRootPath     string = "/media/liuxu/LiuXu/crow/result"
-	FramePath          string = "frame"
+	FramePath          string = "/poster"
+	VideoPath          string = "video"
 )
+
+var cutVideoTask = task.CutVideoTask{Db: libs.Db}
 
 func FetchAllVideoFiles() []result.VideoFileResult {
 	var videoFiles []model.VideoFile
@@ -39,6 +43,7 @@ func RegisterCutVideo(request result.CutVideoRequest) {
 	libs.Db.Table(VideoFileTableName).Where("video_id=?", request.ParentId).First(&videoFile)
 	cutVideo.Name = strings.Join([]string{request.StartTime, request.EndTime, videoFile.FileName}, "-")
 	libs.Db.Table(CutVideoTableName).Create(&cutVideo)
+	go cutVideoTask.ExecuteTask(cutVideo)
 }
 
 func FetchAllCutById(parentId int64) []result.CutVideoResult {
@@ -50,5 +55,5 @@ func FetchAllCutById(parentId int64) []result.CutVideoResult {
 func FetchHeadFrame(videoId int64) string {
 	var videoFile model.VideoFile
 	libs.Db.Table(VideoFileTableName).Where("video_id=?", videoId).First(&videoFile)
-	return filepath.Join(filepath.Dir(videoFile.FilePath), FramePath, videoFile.FileName, "100.jpg")
+	return filepath.Join(SourceRootPath, FramePath, videoFile.Poster)
 }

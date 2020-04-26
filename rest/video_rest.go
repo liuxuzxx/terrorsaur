@@ -27,12 +27,6 @@ func VideoPlayer(ctx iris.Context) {
 	_, _ = fmt.Sscanf(ctx.GetHeader("Range"), "bytes=%d-%d", &startRange, &endRange)
 	videoId, _ := ctx.Params().GetInt64("videoId")
 	videoFileResult := service.FetchVideoFile(videoId)
-	videoFileResult = result.VideoFileResult{
-		VideoId:  0,
-		FilePath: "/media/liuxu/data/rattrap/crow/source/mociro-unit.mp4",
-		FileName: "mociro-unit.mp4",
-		Size:     0,
-	}
 
 	videoFile, videoFileErr := os.Open(videoFileResult.FilePath)
 	if videoFileErr != nil {
