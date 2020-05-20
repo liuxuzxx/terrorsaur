@@ -19,3 +19,22 @@ pkg/
 
 #Filter project file
 *.iml
+
+
+cmake \
+
+
+
+--port=9527
+--basedir=/media/liuxu/data/rattrap/liuxu/mysql-5.7.30
+--datadir=/media/liuxu/data/rattrap/liuxu/mysql-5.7.30/data
+--general_log=0
+--general_log_file=/media/liuxu/data/rattrap/liuxu/log/mysql/mysql-general.log
+--log_error_verbosity=3
+--log_error=/media/liuxu/data/rattrap/liuxu/log/mysql/mysql-error.log
+--socket=/media/liuxu/data/rattrap/liuxu/log/mysql/mysql.sock
+--pid-file=/media/liuxu/data/rattrap/liuxu/log/mysql/mysqld.pid
+--debug=d:t:i:o,/media/liuxu/data/rattrap/liuxu/trace/mysqld.trace
+--console
+
+./mysqld --basedir=/media/liuxu/data/rattrap/liuxu/mysql-5.7.30 --datadir=/media/liuxu/data/rattrap/liuxu/mysql-5.7.30/data --initialize-insecure --log-error=/media/liuxu/data/rattrap/liuxu/log/error.log
