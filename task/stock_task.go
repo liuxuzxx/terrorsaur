@@ -12,13 +12,11 @@ import (
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/jinzhu/gorm"
-	"io"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
-	"terrorsaur/libs"
 	"terrorsaur/model"
 	"terrorsaur/request"
 )
@@ -87,49 +85,46 @@ func (s *StockTask) execute() {
 }
 
 func (s *StockTask) doStockExecute(urlTemplate string, pageCount int) {
-	for pageNumber := 1; pageNumber <= pageCount; pageNumber++ {
+	/*for pageNumber := 1; pageNumber <= pageCount; pageNumber++ {
 		url := fmt.Sprintf(urlTemplate, pageNumber)
 		s.crawlStockHtml(url)
 	}
-	log.Printf("爬取的股票数量是:%d\n", s.StockCount)
+	log.Printf("爬取的股票数量是:%d\n", s.StockCount)*/
 }
 
 func (s *StockTask) crawStockHistoryData() {
-	historyDataUrlTemplate := "http://quotes.money.163.com/service/chddata.html?code=%s&start=19890403&end=20200330&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP"
+	historyDataUrlTemplate := "http://quotes.money.163.com/service/chddata.html?code=%s&start=%s&end=20200401&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP"
 	stocks := s.fetchAllStocks()
 	for _, stock := range stocks {
 		code := stock.StockCode
-		if strings.HasPrefix(code, "6") {
-			code = "1" + code
-		} else {
-			code = "0" + code
+		if len(stock.StartDate) < 10 {
+			continue
 		}
-		url := fmt.Sprintf(historyDataUrlTemplate, code)
-		go s.downloadFile(url, filepath.Join("/home/liuxu/Documents/stock", stock.StockCode+".csv"))
+		if strings.HasPrefix(code, "6") {
+			code = "0" + code
+		} else {
+			code = "1" + code
+		}
+		url := fmt.Sprintf(historyDataUrlTemplate, code, strings.ReplaceAll(stock.StartDate, "-", ""))
+		s.downloadFile(url, filepath.Join("/home/liuxu/Documents/stock", stock.StockCode+".csv"))
 	}
 }
 
 func (s *StockTask) downloadFile(url string, filePath string) {
-	response, err := http.Get(url)
+	command := "wget \"" + url + "\" -O " + filePath + "\n"
+	fmt.Printf("url是:%s\n", command)
+	s.appendFile(command)
+}
+
+func (s *StockTask) appendFile(content string) {
+	file := "/home/liuxu/Documents/stock-history.sh"
+	f, err := os.OpenFile(file, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0660)
 	if err != nil {
-		log.Printf("下文件失败:%s\n", filePath)
+		fmt.Printf("Cannot open file %s!\n", file)
 		return
 	}
-	defer response.Body.Close()
-
-	file, err := os.Create(filePath)
-	if err != nil {
-		log.Fatalf("创建文件失败:%s\n", filePath)
-	}
-	defer file.Close()
-
-	byteCount, err := io.Copy(file, response.Body)
-	if err != nil {
-		log.Fatalf("复制文件出现错误\n")
-	}
-	if byteCount < 1000 {
-		log.Printf("这个文件好像没有下载成功：%s\n", filePath)
-	}
+	defer f.Close()
+	_, _ = f.WriteString(content)
 }
 
 func (s *StockTask) fetchAllStocks() []model.Stock {
@@ -140,9 +135,9 @@ func (s *StockTask) fetchAllStocks() []model.Stock {
 
 func init() {
 	log.Printf("开始爬取股票数据.......")
-	var task = StockTask{
+	/*var task = StockTask{
 		StockCount: int64(0),
 		Db:         libs.Db,
 	}
-	task.execute()
+	task.execute()*/
 }

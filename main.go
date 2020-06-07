@@ -99,6 +99,10 @@ func route() (app *iris.Application) {
 				cutVideoParty.Get("/{parentId:int64}/videos", rest.FetchCutVideos)
 			})
 		})
+		v1.PartyFunc("/api/rattrap/stock", func(stockParty router.Party) {
+			stockParty.Get("/{stockCode:string}/history-data", rest.FetchStockHistoryDatas)
+			stockParty.Get("/stock", rest.FetchStock)
+		})
 	}
 	return app
 }
